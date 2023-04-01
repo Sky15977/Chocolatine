@@ -26,7 +26,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: coding-style
-        run: ##check.sh $(pwd) $(pwd) ##commande du shell ??
+        run: coding-style . . ##check.sh $(pwd) $(pwd) ##commande du shell ??
 
   check_program_compilation:
     runs-on: ubuntu-latest
@@ -53,11 +53,11 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: run tests
-        run: ##tests criterion
+      - name: compilation run_tests
+        run: make run_tests
         timeout-minutes: 2
 
-  push_to_mirror:             ##push in repo mirror
+  push_to_mirror:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:

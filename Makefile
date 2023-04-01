@@ -7,29 +7,41 @@
 
 CC 	=	gcc
 
-SRC	=	main.c
+SRC_MAIN	=	main.c
 
-OBJ	=	$(SRC:.c=.o)
+SRC	=
 
-NAME	=	libmy.a
+SRC_CRIT	=
 
-NAME_BIN	= 	chocolatine
+OBJ	=	$(SRC:.c=.o) $(SRC_MAIN:.c=.o)
 
-LIBA	=	-L. -lmy
+OBJ_CRIT	=	$(SRC:.c=.o) $(SRC_CRIT:.c=.o)
+
+NAME	= 	chocolatine
+
+NAME_CRIT	=	unit_tests
 
 INCLUDES        =       -I includes/
 
 CFLAGS	=	$(INCLUDES) -Wall -Wextra -g
 
+CRIT_F	=	$(INCLUDES) --coverage -lcriterion
+
 all:	$(NAME)
 
 $(NAME):	$(OBJ)
-		@ar rc $(NAME) $(OBJ)
-		@$(CC) -o $(NAME_BIN) $(LIBA)
+		@$(CC) -o $(NAME) $(OBJ) $(CFLAGS)
 		@echo -e "\033[1;32mCompilation done\033[0m"
 
 %.o:	%.c
 	@$(CC) $(CFLAGS) -c $< -o $@
+
+unit_tests:
+	@$(CC) -o $(NAME_CRIT) $(OBJ) $(OBJ_CRIT) $(CRIT_F)
+
+run_tests:
+	@./$(NAME_CRIT)
+	@gcovr
 
 clean:
 	@rm -f $(OBJ)
@@ -38,7 +50,7 @@ clean:
 
 fclean:	clean
 	@rm -f $(NAME)
-	@rm -f $(NAME_BIN)
+	@rm -f $(NAME_CRIT)
 	@rm -f coding-style-reports.log
 	@rm -f vgcore*
 	@echo -e "\033[1;31mFclean done\033[0m"
