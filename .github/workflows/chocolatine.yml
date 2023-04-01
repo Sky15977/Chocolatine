@@ -4,57 +4,69 @@ run-name: ${{github.actor}} ${{github.event_name}}
 
 on:
   push:
-    branches:
-      ga-ignore-*
+    branches-ignore:
+      - 'ga-ignore-*'
   pull_request:
-    branches:
-      ga-ignore-*
+    branches-ignore:
+      - 'ga-ignore-*'
 
 
 env:
   MIRROR_URL: git@github.com:EpitechPromo2027/B-DOP-200-REN-2-1-chocolatine-matthew.charuel.git
-  EXECUTABLES: choco
+  EXECUTABLES: chocolatine
 
 
 jobs:
   check_coding_style:
     runs-on: ubuntu-latest
-    ##docker du coding style
+    container:
+      image: ghcr.io/epitech/coding-style-checker:latest
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: coding-style
         run: ##check.sh $(pwd) $(pwd) ##commande du shell ??
-        ##if error exit
 
   check_program_compilation:
     runs-on: ubuntu-latest
-    ##docker
+    container:
+      image: epitechcontent/epitest-docker
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Build
         run: make
-      ##timeout max 2min
+        timeout-minutes: 2
       - name: Clean
         run: make clean
       - name: check executables ##vérifier l'executable, échoue si absent ou non éxécutable
         run: ##if exec error alors exit
+        ##${{ env.EXECUTABLES }}
 
   run_tests:
     runs-on: ubuntu-latest
-    ##docker
+    container:
+      image: epitechcontent/epitest-docker
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: run tests
         run: ##tests criterion
-      ##timeout max 2min
+        timeout-minutes: 2
 
   push_to_mirror:             ##push in repo mirror
-    if: github.event_name == 'push'
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
-    steps:                                              # <-- must use actions/checkout before mirroring!
+    steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: pixta-dev/repository-mirroring-action@v1
         with:
           target_repo_url:
-            MIRROR_URL
-          ssh_private_key:                              # <-- use 'secrets' to pass credential information.
-            ${{ secrets.GITHUB_TOKEN }}
+            ${{ env.MIRROR_URL }}
+          ssh_private_key:
+            ${{ secrets.GITHUB_TOKEN }} ##pas la bonne phrase après secrets

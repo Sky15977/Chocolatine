@@ -13,7 +13,7 @@ OBJ	=	$(SRC:.c=.o)
 
 NAME	=	libmy.a
 
-NAME_BIN	= 	choco
+NAME_BIN	= 	chocolatine
 
 LIBA	=	-L. -lmy
 
