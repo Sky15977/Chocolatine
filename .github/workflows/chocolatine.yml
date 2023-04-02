@@ -67,7 +67,7 @@ jobs:
         run: make unit_tests
         timeout-minutes: 2
 
-  push_to_mirror: ##
+  push_to_mirror: 
     if: ${{ github.event_name == 'push' }}
     needs: run_tests
     runs-on: ubuntu-latest
