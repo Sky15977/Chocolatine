@@ -14,7 +14,7 @@ env:
   MIRROR_URL: git@github.com:EpitechPromo2027/B-DOP-200-REN-2-1-chocolatine-matthew.charuel.git
   EXECUTABLES: chocolatine
 
-jobs: ##
+jobs:
   check_coding_style:
     runs-on: ubuntu-latest
     container:
@@ -46,7 +46,7 @@ jobs: ##
           do
             if [ ! -x "$i"]
               then
-                echo "Error: $executable not found or not executable"
+                echo "Error: executable not found or not executable"
                 exit 1
             fi
           done
@@ -67,7 +67,7 @@ jobs: ##
         run: make unit_tests
         timeout-minutes: 2
 
-  push_to_mirror:
+  push_to_mirror: ##
     if: ${{ github.event_name == 'push' }}
     needs: run_tests
     runs-on: ubuntu-latest
