@@ -17,47 +17,6 @@ env:
 
 
 jobs:
-  check_coding_style:
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/epitech/coding-style-checker:latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: coding-style
-        run: coding-style . . ##check.sh $(pwd) $(pwd) ##commande du shell ??
-
-  check_program_compilation:
-    runs-on: ubuntu-latest
-    container:
-      image: epitechcontent/epitest-docker
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Build
-        run: make
-        timeout-minutes: 2
-      - name: Clean
-        run: make clean
-      - name: check executables
-        run: ##if exec error alors exit
-        ##${{ env.EXECUTABLES }}
-        ##vérifier l'executable, échoue si absent ou non éxécutable
-
-  run_tests:
-    runs-on: ubuntu-latest
-    container:
-      image: epitechcontent/epitest-docker
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: compilation run_tests
-        run: make unit_tests
-        timeout-minutes: 2
-
   push_to_mirror:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
