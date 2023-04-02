@@ -38,8 +38,6 @@ $(NAME):	$(OBJ)
 
 unit_tests:
 	@$(CC) -o $(NAME_CRIT) $(OBJ) $(OBJ_CRIT) $(CRIT_F)
-
-run_tests:
 	@./$(NAME_CRIT)
 	@gcovr
 

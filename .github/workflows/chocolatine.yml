@@ -41,9 +41,10 @@ jobs:
         timeout-minutes: 2
       - name: Clean
         run: make clean
-      - name: check executables ##vérifier l'executable, échoue si absent ou non éxécutable
+      - name: check executables
         run: ##if exec error alors exit
         ##${{ env.EXECUTABLES }}
+        ##vérifier l'executable, échoue si absent ou non éxécutable
 
   run_tests:
     runs-on: ubuntu-latest
@@ -54,7 +55,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: compilation run_tests
-        run: make run_tests
+        run: make unit_tests
         timeout-minutes: 2
 
   push_to_mirror:
@@ -69,4 +70,4 @@ jobs:
           target_repo_url:
             ${{ env.MIRROR_URL }}
           ssh_private_key:
-            ${{ secrets.GITHUB_TOKEN }} ##pas la bonne phrase après secrets
+            ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
