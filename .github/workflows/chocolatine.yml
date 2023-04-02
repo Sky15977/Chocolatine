@@ -27,6 +27,7 @@ jobs:
         run: check.sh $(pwd) $(pwd)
 
   check_program_compilation:
+    needs: check_coding_style
     runs-on: ubuntu-latest
     container:
       image: epitechcontent/epitest-docker
@@ -51,6 +52,7 @@ jobs:
           done
 
   run_tests:
+    needs: check_program_compilation
     runs-on: ubuntu-latest
     container:
       image: epitechcontent/epitest-docker
@@ -67,6 +69,7 @@ jobs:
 
   push_to_mirror:
     if: ${{ github.event_name == 'push' }}
+    needs: run_tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -77,4 +80,4 @@ jobs:
           target_repo_url:
             ${{ env.MIRROR_URL }}
           ssh_private_key:
-            ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
+            ${{ secrets.GIT_SSH_PRIVATE_KEY }}
