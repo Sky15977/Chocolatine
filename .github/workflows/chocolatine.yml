@@ -39,6 +39,18 @@ jobs:
             fi
           done
 
+  run_tests:
+    runs-on: ubuntu-latest
+    container:
+      image: epitechcontent/epitest-docker
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: compilation run_tests
+        run: make unit_tests
+        timeout-minutes: 2
+
   push_to_mirror:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
